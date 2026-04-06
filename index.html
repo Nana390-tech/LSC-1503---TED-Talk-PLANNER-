@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TED Talk Builder – Find Your Voice</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E62B1E;
+    --red-deep: #b01e14;
+    --amber: #e08c00;
+    --amber-light: #FFC94D;
+    --page-bg: #FFF6F0;
+    --card-bg: #FFFFFF;
+    --card2-bg: #FFF0EB;
+    --card3-bg: #FFF9EE;
+    --text: #1C1410;
+    --text-muted: #6B5B52;
+    --text-light: #9A8880;
+    --border: rgba(230,43,30,0.12);
+    --border-soft: rgba(0,0,0,0.07);
+    --step1: #E62B1E;
+    --step2: #E85D20;
+    --step3: #D4841A;
+    --step4: #C9A100;
+    --step5: #3DAD6B;
+    --hero-from: #E62B1E;
+    --hero-to: #FF9A3C;
+  }
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--page-bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+ 
+  /* ─── SPOTLIGHT HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #C0392B 0%, #E62B1E 30%, #F06A1A 65%, #FFA040 100%);
+  }
+ 
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(255,220,100,0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+ 
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--page-bg));
+  }
+ 
+  .ted-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,0.3);
+    margin-bottom: 32px;
+    animation: fadeDown 0.6s ease both;
+  }
+ 
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 800px;
+    color: #fff;
+    animation: fadeDown 0.8s 0.1s ease both;
+  }
+ 
+  .hero h1 em {
+    font-style: italic;
+    color: #FFE08A;
+  }
+ 
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.82);
+    max-width: 560px;
+    line-height: 1.7;
+    animation: fadeDown 0.8s 0.2s ease both;
+  }
+ 
+  .hero-cta {
+    margin-top: 48px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeDown 0.8s 0.35s ease both;
+    position: relative; z-index: 1;
+  }
+ 
+  .btn-primary {
+    background: #fff;
+    color: var(--red);
+    border: none;
+    padding: 16px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 40px;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(0,0,0,0.2); background: #fff5f0; }
+ 
+  .btn-outline {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    padding: 16px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 40px;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.8); }
+ 
+  /* ─── STAGE GRAPHIC ─── */
+  .stage-graphic {
+    margin-top: 64px;
+    width: 100%;
+    max-width: 500px;
+    animation: fadeUp 1s 0.5s ease both;
+    position: relative; z-index: 1;
+  }
+ 
+  /* ─── WHAT IS TED section ─── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+ 
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+ 
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+ 
+  .section-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 680px;
+  }
+ 
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+ 
+  /* ─── LESSON STEPS ─── */
+  .steps-wrapper {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+ 
+  .steps-header {
+    text-align: center;
+    padding: 80px 0 60px;
+  }
+  .steps-header p { color: var(--text-muted); }
+ 
+  .step-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border-soft);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: all 0.25s;
+    box-shadow: 0 2px 12px rgba(230,43,30,0.06);
+  }
+  .step-card:hover { box-shadow: 0 8px 32px rgba(230,43,30,0.12); transform: translateY(-1px); }
+  .step-card.open { border-color: rgba(230,43,30,0.2); box-shadow: 0 8px 40px rgba(230,43,30,0.14); }
+ 
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 32px;
+    cursor: pointer;
+    user-select: none;
+  }
+ 
+  .step-num {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    border: 2px solid currentColor;
+  }
+ 
+  .step-title-area { flex: 1; }
+  .step-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+  .step-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+ 
+  .step-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+    color: var(--text-light);
+  }
+  .step-card.open .step-arrow { transform: rotate(180deg); color: var(--red); }
+ 
+  .step-body {
+    display: none;
+    padding: 0 32px 36px;
+    border-top: 1.5px solid var(--border-soft);
+  }
+  .step-card.open .step-body { display: block; }
+ 
+  .step-intro {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin: 24px 0 28px;
+  }
+ 
+  /* ─── TEACH BOX ─── */
+  .teach-box {
+    background: #FFF8EC;
+    border-left: 4px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+  .teach-box strong { color: #8A5A00; }
+ 
+  /* ─── EXAMPLE BOX ─── */
+  .example-box {
+    background: #FFF2F2;
+    border: 1.5px solid rgba(230,43,30,0.18);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .example-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .example-text {
+    font-style: italic;
+    color: #5A2A2A;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+ 
+  /* ─── TIP BOX ─── */
+  .tip-box {
+    background: #FFFBEA;
+    border: 1.5px solid #F0D060;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #5A4A00;
+    line-height: 1.6;
+  }
+  .tip-box::before { content: '💡 '; }
+ 
+  /* ─── STUDENT WORKSPACE ─── */
+  .workspace {
+    background: linear-gradient(135deg, #FFF5F2, #FFF0F8);
+    border: 1.5px solid rgba(230,43,30,0.15);
+    border-radius: 12px;
+    padding: 28px;
+    margin-top: 28px;
+  }
+  .workspace-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .workspace-title::before { content: '✍️'; }
+ 
+  .field-group { margin-bottom: 22px; }
+  .field-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  .field-hint {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+ 
+  textarea, input[type=text] {
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 14px 16px;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    line-height: 1.6;
+  }
+  textarea:focus, input[type=text]:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(230,43,30,0.1);
+  }
+  textarea { min-height: 100px; }
+ 
+  select {
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  select:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,43,30,0.1); }
+ 
+  .char-counter {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+ 
+  /* ─── VISUAL AIDS GRID ─── */
+  .viz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 28px 0;
+  }
+  .viz-card {
+    background: #fff;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .viz-card:hover { border-color: var(--step5); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(61,173,107,0.15); }
+  .viz-card .icon { font-size: 2.2rem; margin-bottom: 12px; }
+  .viz-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .viz-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+ 
+  /* ─── DO / DON'T TABLE ─── */
+  .do-dont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  @media (max-width: 600px) { .do-dont { grid-template-columns: 1fr; } }
+ 
+  .do-col, .dont-col {
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .do-col { background: #EEF9F3; border: 1.5px solid rgba(61,173,107,0.25); }
+  .dont-col { background: #FFF2F2; border: 1.5px solid rgba(230,43,30,0.2); }
+  .do-col h4 { color: #267A4A; margin-bottom: 12px; font-size: 0.9rem; letter-spacing: 0.04em; }
+  .dont-col h4 { color: var(--red); margin-bottom: 12px; font-size: 0.9rem; letter-spacing: 0.04em; }
+  .do-col li, .dont-col li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    padding-left: 18px;
+    position: relative;
+    list-style: none;
+    line-height: 1.5;
+  }
+  .do-col li::before { content: '✓'; position: absolute; left: 0; color: #267A4A; font-weight: 700; }
+  .dont-col li::before { content: '✗'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+ 
+  /* ─── CHECKLIST ─── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 4px;
+    border-bottom: 1.5px solid var(--border-soft);
+    font-size: 0.93rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 4px;
+  }
+  .checklist li:hover { background: #fff8f5; }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  .checklist li.checked .check-box { background: var(--step5); border-color: var(--step5); }
+  .checklist li.checked .check-box::after { content: '✓'; color: #fff; font-weight: 700; }
+  .checklist li.checked span { text-decoration: line-through; color: #bbb; }
+ 
+  /* ─── SAVE PANEL ─── */
+  .save-panel {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+  .save-card {
+    background: linear-gradient(135deg, #E62B1E, #F06A1A, #FFA040);
+    border-radius: 20px;
+    padding: 56px 48px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(230,43,30,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .save-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(255,255,255,0.12), transparent 60%);
+  }
+  .save-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 12px;
+    color: #fff;
+    position: relative;
+  }
+  .save-card p { color: rgba(255,255,255,0.8); margin-bottom: 32px; position: relative; }
+  .save-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .save-actions .btn-primary { background: #fff; color: var(--red); }
+  .save-actions .btn-outline { color: #fff; border-color: rgba(255,255,255,0.6); }
+ 
+  /* ─── PROGRESS BAR ─── */
+  .progress-bar-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 999;
+    background: rgba(230,43,30,0.1);
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--amber-light));
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+ 
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    border-top: 1.5px solid var(--border-soft);
+    background: #fff;
+  }
+  footer strong { color: var(--text-muted); }
+ 
+  /* ─── SCROLL COLORS FOR STEPS ─── */
+  .step-1 .step-num { color: var(--step1); border-color: var(--step1); }
+  .step-2 .step-num { color: var(--step2); border-color: var(--step2); }
+  .step-3 .step-num { color: var(--step3); border-color: var(--step3); }
+  .step-4 .step-num { color: var(--step4); border-color: var(--step4); }
+  .step-5 .step-num { color: var(--step5); border-color: var(--step5); }
+ 
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 4px;
+    left: 0;
+    right: 0;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+    border-bottom: 1px solid rgba(230,43,30,0.1);
+    box-shadow: 0 2px 16px rgba(230,43,30,0.08);
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--red); }
+ 
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .step-header { padding: 20px; }
+    .step-body { padding: 0 20px 28px; }
+    .workspace { padding: 20px; }
+    .save-card { padding: 36px 24px; }
+  }
+ 
+  /* ─── STAGE SVG SEPARATOR ─── */
+  .stage-sep {
+    text-align: center;
+    padding: 20px 0 40px;
+    opacity: 0.2;
+    font-size: 2rem;
+    letter-spacing: 12px;
+  }
+ 
+  /* ─── POINT BUILDER ─── */
+  .points-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .point-card {
+    background: #fff;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .point-card h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 14px;
+  }
+ 
+  .slide-rule {
+    background: #F0FBF5;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-left: 4px solid var(--step5);
+  }
+  .slide-rule h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .slide-rule p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+ 
+  .big-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-style: italic;
+    color: var(--red);
+    text-align: center;
+    padding: 40px 20px;
+    line-height: 1.4;
+  }
+ 
+  .timer-note {
+    background: #FFFBEA;
+    border: 1.5px solid #F0D060;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    color: #5A4A00;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .timer-note span { font-size: 1.3rem; }
+  /* ─── IKIGAI GRID ─── */
+  .ikigai-label { margin-bottom: 20px; }
+  .ikigai-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 4px;
+  }
+  @media (max-width: 640px) { .ikigai-grid { grid-template-columns: 1fr; } }
+ 
+  .ik-card {
+    background: #fff;
+    border: 2px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+  .ik-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .ik-love  { border-top: 4px solid #E62B1E; }
+  .ik-good  { border-top: 4px solid #3b7ed4; }
+  .ik-world { border-top: 4px solid #3DAD6B; }
+  .ik-mission { border-top: 4px solid #D4841A; }
+  .ik-icon  { font-size: 1.6rem; margin-bottom: 6px; }
+  .ik-label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .ik-hint  { font-size: 0.78rem; color: var(--text-light); margin-bottom: 10px; line-height: 1.5; }
+  .ik-card textarea {
+    font-size: 0.88rem;
+    min-height: 70px;
+    border-color: rgba(0,0,0,0.08);
+  }
+ 
+  /* ─── HOOK CARDS ─── */
+  .hook-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .hook-card {
+    border: 2px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 16px 14px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.2s;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .hook-card:hover { transform: translateY(-3px); }
+  .hook-card.selected { border-width: 2.5px; }
+  .hook-card-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .hook-card-name { font-weight: 700; font-size: 0.82rem; margin-bottom: 6px; color: var(--text); }
+  .hook-card-ex { font-size: 0.72rem; color: var(--text-light); line-height: 1.5; font-style: italic; }
+  .hc-bold    { border-top: 4px solid var(--step1); }
+  .hc-question{ border-top: 4px solid #3b7ed4; }
+  .hc-stat    { border-top: 4px solid var(--step3); }
+  .hc-story   { border-top: 4px solid var(--step5); }
+  .hc-bold.selected    { background: #FFF2F2; border-color: var(--step1); }
+  .hc-question.selected{ background: #EFF6FF; border-color: #3b7ed4; }
+  .hc-stat.selected    { background: #FFF8EC; border-color: var(--step3); }
+  .hc-story.selected   { background: #EEF9F3; border-color: var(--step5); }
+ 
+  /* ─── SLIDE COMPARE ─── */
+  .slide-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 28px 0 12px;
+  }
+  @media (max-width: 580px) { .slide-compare { grid-template-columns: 1fr; } }
+  .slide-col-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .bad-label  { color: var(--red); }
+  .good-label { color: var(--step5); }
+  .slide-preview {
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 2px solid;
+  }
+  .bad-preview {
+    background: #1a1a2e;
+    border-color: rgba(230,43,30,0.35);
+  }
+  .bad-slide-content { padding: 16px; width: 100%; }
+  .bad-title { color: #aaa; font-size: 0.7rem; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 4px; margin-bottom: 8px; }
+  .bad-bullets { list-style: none; }
+  .bad-bullets li { color: #ccc; font-size: 0.6rem; margin-bottom: 5px; }
+  .good-preview {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    border-color: rgba(61,173,107,0.4);
+  }
+  .good-word {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 6px;
+    text-shadow: 0 2px 20px rgba(255,255,255,0.3);
+  }
+  .slide-caption { font-size: 0.8rem; color: var(--text-light); line-height: 1.5; }
+ 
+  /* ─── ROADMAP CARD ─── */
+  .roadmap-card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(230,43,30,0.2);
+    border: 1.5px solid rgba(230,43,30,0.15);
+    animation: fadeUp 0.5s ease both;
+  }
+  .roadmap-header {
+    background: linear-gradient(135deg, #C0392B, #E62B1E, #F06A1A);
+    padding: 32px 36px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .roadmap-print-btn {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .roadmap-print-btn:hover { background: rgba(255,255,255,0.35); }
+  .roadmap-body {
+    background: #fff;
+    padding: 36px;
+  }
+  .rm-section { margin-bottom: 4px; }
+  .rm-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .rm-text { font-size: 1.05rem; color: var(--text); line-height: 1.6; font-weight: 500; }
+  .rm-text-sm { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+  .rm-italic { font-style: italic; color: var(--text-muted); }
+  .rm-divider { height: 1.5px; background: rgba(230,43,30,0.08); margin: 22px 0; }
+  .rm-story-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 580px) { .rm-story-grid { grid-template-columns: 1fr; } }
+  .rm-story-cell { background: #FFF6F0; border-radius: 8px; padding: 14px; }
+  .rm-story-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 6px;
+  }
+  .rm-points { display: flex; flex-direction: column; gap: 10px; }
+  .rm-point { display: flex; align-items: flex-start; gap: 12px; }
+  .rm-point-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .rm-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 580px) { .rm-grid-2 { grid-template-columns: 1fr; } }
+  .rm-footer-note {
+    background: linear-gradient(135deg, #FFF5F2, #FFF0F8);
+    border: 1.5px solid rgba(230,43,30,0.12);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+  }
+  /* ─── WATCH & ANALYSE SECTION ─── */
+  .watch-section {
+    background: linear-gradient(180deg, var(--page-bg) 0%, #fff 40%, #fff 100%);
+    padding-bottom: 20px;
+  }
+ 
+  .talks-grid {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+ 
+  .talk-card {
+    background: #fff;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .talk-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(230,43,30,0.12); }
+ 
+  .talk-top { padding: 20px; flex: 1; }
+ 
+  .talk-badges { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .talk-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .badge-time    { background: #FFF0EB; color: var(--red); border: 1px solid rgba(230,43,30,0.2); }
+  .badge-skill   { background: #F0F8FF; color: #1a6fa8; border: 1px solid rgba(26,111,168,0.2); }
+ 
+  .talk-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .thumb-play {
+    width: 52px;
+    height: 52px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #fff;
+    backdrop-filter: blur(4px);
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .talk-thumb:hover .thumb-play { background: rgba(255,255,255,0.35); transform: scale(1.1); }
+  .thumb-label {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 16px;
+    line-height: 1.4;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+ 
+  .talk-meta { margin-bottom: 16px; }
+  .talk-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .talk-speaker {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--red);
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .talk-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+ 
+  .talk-btn {
+    display: block;
+    background: var(--red);
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+  .talk-btn:hover { background: var(--red-deep); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(230,43,30,0.3); }
+ 
+  .talk-analysis {
+    background: linear-gradient(135deg, #FFF5F2, #FFF9F5);
+    border-top: 1.5px solid rgba(230,43,30,0.1);
+    padding: 20px;
+  }
+  .analysis-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .talk-analysis .field-label { color: var(--text); font-size: 0.8rem; }
+  .talk-analysis textarea {
+    font-size: 0.85rem;
+    min-height: 60px;
+    border-color: rgba(0,0,0,0.1);
+  }
+  .talk-analysis .field-group { margin-bottom: 14px; }
+  /* ─── ASSESSMENT DASHBOARD ─── */
+  .assess-banner {
+    background: var(--page-bg);
+    padding: 60px 24px;
+    border-bottom: 2px solid var(--border-soft);
+  }
+  .assess-inner {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .assess-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .assess-course {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .assess-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .assess-sub { color: var(--text-muted); font-size: 0.9rem; }
+  .assess-weight-pill {
+    background: var(--red);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 10px 20px;
+    border-radius: 30px;
+    white-space: nowrap;
+    align-self: flex-start;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(230,43,30,0.25);
+  }
+ 
+  .assess-parts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) { .assess-parts { grid-template-columns: 1fr; } }
+ 
+  .assess-part {
+    background: #fff;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .part1 { border-top: 4px solid var(--amber); }
+  .part2 { border-top: 4px solid var(--red); }
+ 
+  .part-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .part-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-light);
+  }
+  .part-weight {
+    background: #FFF0EB;
+    color: var(--red);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 3px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(230,43,30,0.2);
+  }
+  .part-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .part-timing {
+    font-size: 0.78rem;
+    color: var(--red);
+    margin-bottom: 14px;
+    font-family: 'DM Mono', monospace;
+  }
+  .part-items {
+    list-style: none;
+    margin-bottom: 16px;
+  }
+  .part-items li {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    padding: 5px 0 5px 16px;
+    position: relative;
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .part-items li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+  .part-items li:last-child { border-bottom: none; }
+  .part-criteria { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .crit-pill {
+    background: #FFF5F2;
+    border: 1px solid rgba(230,43,30,0.15);
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .crit-pill span { color: var(--red); font-weight: 700; }
+ 
+  .assess-elements, .topic-list-section {
+    background: #fff;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .elements-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+  .elements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+  }
+  .elem-card {
+    background: #FFF6F0;
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    border: 1.5px solid rgba(230,43,30,0.1);
+  }
+  .elem-num {
+    width: 26px;
+    height: 26px;
+    background: var(--red);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+  .elem-card strong { color: var(--text); font-size: 0.85rem; display: block; margin-bottom: 2px; }
+  .elem-card small { color: var(--text-muted); font-size: 0.72rem; line-height: 1.4; }
+ 
+  .assess-warnings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .warn-item {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+  .warn-red { background: #FFF2F2; border: 1.5px solid rgba(230,43,30,0.2); color: #7a1a1a; }
+  .warn-red strong { color: var(--red); }
+  .warn-amber { background: #FFFBEA; border: 1.5px solid #F0D060; color: #5A4A00; }
+  .warn-amber strong { color: #8A5A00; }
+ 
+  .topic-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .topic-pill {
+    background: #FFF0EB;
+    border: 1.5px solid rgba(230,43,30,0.15);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    padding: 7px 14px;
+    border-radius: 20px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .topic-pill:hover { background: #FFE4DC; border-color: rgba(230,43,30,0.35); color: var(--text); }
+  .topic-own { border-color: rgba(212,132,26,0.35); background: #FFF8EC; color: #8A5A00; }
+</style>
+</head>
+<body>
+ 
+<div class="progress-bar-wrapper"><div class="progress-bar" id="pbar"></div></div>
+ 
+<nav>
+  <div class="nav-logo">TED Talk Builder</div>
+  <div class="nav-links">
+    <a href="#assessment">Assessment</a>
+    <a href="#lesson">Lesson</a>
+    <a href="#watch">Watch Talks</a>
+    <a href="#steps">My Plan</a>
+    <a href="#checklist">Checklist</a>
+  </div>
+</nav>
+ 
+<!-- ═══ ASSESSMENT DASHBOARD ═══ -->
+<div class="assess-banner" id="assessment">
+  <div class="assess-inner">
+ 
+    <div class="assess-heading">
+      <div class="assess-title-block">
+        <div class="assess-course">LSC 1503 · Professional Spoken Communication · GARD / GS</div>
+        <h2 class="assess-title">Final Practical: TED-Style Presentation</h2>
+        <p class="assess-sub">Read this before you begin. Your assessment has two parts — know what each one requires.</p>
+      </div>
+      <div class="assess-weight-pill">50% of Course Grade</div>
+    </div>
+ 
+    <div class="assess-parts">
+ 
+      <div class="assess-part part1">
+        <div class="part-header">
+          <span class="part-num">Part 1</span>
+          <span class="part-weight">10%</span>
+        </div>
+        <div class="part-title">One Slide + Overview</div>
+        <div class="part-timing">⏱ 1–2 minutes · Week 13</div>
+        <ul class="part-items">
+          <li>Present <strong>one fully developed content slide</strong> (not a title slide)</li>
+          <li>Show draft / planned slides for the rest of your talk</li>
+          <li>Give a short <strong>overview</strong> of your whole presentation</li>
+          <li>Audio recorded on Blackboard Collaborate</li>
+        </ul>
+        <div class="part-criteria">
+          <div class="crit-pill">Spoken Content <span>20%</span></div>
+          <div class="crit-pill">Presentation Plan <span>20%</span></div>
+          <div class="crit-pill">Slide Quality <span>20%</span></div>
+          <div class="crit-pill">Spoken Language <span>20%</span></div>
+          <div class="crit-pill">Communication Skills <span>20%</span></div>
+        </div>
+      </div>
+ 
+      <div class="assess-part part2">
+        <div class="part-header">
+          <span class="part-num">Part 2</span>
+          <span class="part-weight">40%</span>
+        </div>
+        <div class="part-title">Full Presentation + PowerPoint</div>
+        <div class="part-timing">⏱ 3–6 minutes · Week 15 (live, in-person)</div>
+        <ul class="part-items">
+          <li>Submit completed PowerPoint to Blackboard by Week 14</li>
+          <li>Deliver live in front of a real audience</li>
+          <li>Your slides must include all <strong>5 required elements</strong> (see below)</li>
+          <li>Use the official PPT template from Blackboard</li>
+        </ul>
+        <div class="part-criteria">
+          <div class="crit-pill">Spoken Content <span>40%</span></div>
+          <div class="crit-pill">Organisation & Slides <span>10%</span></div>
+          <div class="crit-pill">Spoken Language <span>25%</span></div>
+          <div class="crit-pill">Communication Skills <span>25%</span></div>
+        </div>
+      </div>
+ 
+    </div>
+ 
+    <!-- 5 REQUIRED ELEMENTS -->
+    <div class="assess-elements">
+      <div class="elements-label">📋 Your Presentation MUST Include These 5 Elements</div>
+      <div class="elements-grid">
+        <div class="elem-card"><span class="elem-num">1</span><div><strong>A Hook</strong><br><small>Open with something that grabs attention immediately</small></div></div>
+        <div class="elem-card"><span class="elem-num">2</span><div><strong>Three Main Points</strong><br><small>Each with details, examples, and evidence</small></div></div>
+        <div class="elem-card"><span class="elem-num">3</span><div><strong>One Well-Developed Story</strong><br><small>Personal, specific, with setup and lesson</small></div></div>
+        <div class="elem-card"><span class="elem-num">4</span><div><strong>One Well-Developed Example</strong><br><small>Real evidence that supports your idea</small></div></div>
+        <div class="elem-card"><span class="elem-num">5</span><div><strong>A Clear Ending</strong><br><small>A strong closing statement or call to action</small></div></div>
+      </div>
+    </div>
+ 
+    <!-- WARNING BOX -->
+    <div class="assess-warnings">
+      <div class="warn-item warn-red">⚠️ <strong>Reading from notes or screen = automatic cap at 60%</strong> if done for more than 50% of your talk.</div>
+      <div class="warn-item warn-amber">📸 <strong>AI-generated images</strong> are allowed but must be referenced on your slide.</div>
+      <div class="warn-item warn-amber">🤝 <strong>Pairs allowed</strong> with teacher approval — shared grade for slides/visuals only. All speaking marks are individual.</div>
+    </div>
+ 
+    <!-- TOPIC LIST -->
+    <div class="topic-list-section">
+      <div class="elements-label">🎯 Choose Your Topic — Or Propose Your Own</div>
+      <div class="topic-grid">
+        <div class="topic-pill">What Makes My Heart Sing</div>
+        <div class="topic-pill">The Power of Storytelling in Leadership</div>
+        <div class="topic-pill">Innovation & Creativity in Everyday Life</div>
+        <div class="topic-pill">The Role of Technology in Shaping Our Future</div>
+        <div class="topic-pill">Sustainable Living: Making a Difference</div>
+        <div class="topic-pill">The Science of Resilience</div>
+        <div class="topic-pill">Mindfulness & Mental Health</div>
+        <div class="topic-pill">Global Citizenship: Your Role in the World</div>
+        <div class="topic-pill">How Looking After Family Makes You a Leader</div>
+        <div class="topic-pill">What Volunteering Taught Me About Leadership</div>
+        <div class="topic-pill topic-own">✋ Own Choice — requires teacher's written approval</div>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="ted-badge">HCT · Communication Skills · TED Talk Unit</div>
+  <h1>Ideas Worth<br><em>Speaking.</em></h1>
+  <p class="hero-sub">A step-by-step guide to crafting and delivering your own TED Talk — starting with what makes your heart sing.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="document.getElementById('lesson').scrollIntoView({behavior:'smooth'})">Start the Lesson ↓</button>
+    <button class="btn-outline" onclick="document.getElementById('steps').scrollIntoView({behavior:'smooth'})">Jump to My Plan</button>
+  </div>
+ 
+  <!-- Stage illustration -->
+  <svg class="stage-graphic" viewBox="0 0 500 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Stage floor -->
+    <rect x="0" y="120" width="500" height="40" rx="2" fill="rgba(0,0,0,0.2)"/>
+    <!-- Spotlight beam -->
+    <path d="M 250 0 L 150 120 L 350 120 Z" fill="url(#spot)" opacity="0.35"/>
+    <!-- Speaker silhouette -->
+    <ellipse cx="250" cy="108" rx="8" ry="4" fill="rgba(255,255,255,0.3)"/>
+    <rect x="246" y="80" width="8" height="28" rx="4" fill="rgba(255,255,255,0.35)"/>
+    <circle cx="250" cy="74" r="8" fill="rgba(255,255,255,0.35)"/>
+    <!-- Arms -->
+    <line x1="246" y1="92" x2="232" y2="103" stroke="rgba(255,255,255,0.35)" stroke-width="4" stroke-linecap="round"/>
+    <line x1="254" y1="92" x2="268" y2="103" stroke="rgba(255,255,255,0.35)" stroke-width="4" stroke-linecap="round"/>
+    <!-- TED logo on stage -->
+    <text x="220" y="138" font-family="monospace" font-size="11" fill="rgba(255,255,255,0.7)" letter-spacing="4" font-weight="bold">TED</text>
+    <!-- Stage edge glow -->
+    <line x1="0" y1="120" x2="500" y2="120" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+    <defs>
+      <radialGradient id="spot" cx="50%" cy="0%" r="100%">
+        <stop offset="0%" stop-color="#F5A623" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#E62B1E" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+  </svg>
+</section>
+ 
+<!-- ═══ WHAT IS A TED TALK ═══ -->
+<div id="lesson">
+<section class="section">
+  <div class="section-label">Unit Overview</div>
+  <h2 class="section-title">What is a TED Talk?</h2>
+  <p class="section-body">
+    TED stands for <strong>Technology, Education, Design</strong> — but TED Talks have grown to cover every topic imaginable. The one rule? <em>Ideas worth spreading.</em> A TED Talk is a short, powerful speech (usually 4–18 minutes) where a speaker shares one big idea with the world — through story, evidence, and passion.
+  </p>
+  <br><br>
+  <p class="section-body">
+    For your assessment, you will give a <strong>4-minute TED Talk</strong> on a topic that genuinely excites you. You will be judged not just on what you say — but on <em>how</em> you say it, the story you tell, and the way you present your ideas visually.
+  </p>
+ 
+  <div class="big-quote">"The best talks make you feel something before they make you think something."</div>
+ 
+  <div class="do-dont">
+    <div class="do-col">
+      <h4>✦ A TED Talk IS</h4>
+      <ul>
+        <li>A personal, passionate perspective</li>
+        <li>One central "big idea"</li>
+        <li>A story + evidence + emotion</li>
+        <li>Conversational and authentic</li>
+        <li>Rehearsed but not robotic</li>
+      </ul>
+    </div>
+    <div class="dont-col">
+      <h4>✦ A TED Talk is NOT</h4>
+      <ul>
+        <li>A formal essay read aloud</li>
+        <li>A PowerPoint with walls of text</li>
+        <li>A list of facts without feeling</li>
+        <li>Memorised word-for-word</li>
+        <li>About impressing with long words</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</div>
+ 
+<hr class="divider">
+ 
+<!-- ═══ WATCH & ANALYSE ═══ -->
+<div id="watch" class="watch-section">
+  <div class="section" style="padding-bottom:0;">
+    <div class="section-label">Learn from the Experts</div>
+    <h2 class="section-title">Watch Real TED Talks — Then Analyse Them</h2>
+    <p class="section-body">Before you build your own talk, study the masters. Each video below is short, clear, and directly teaches one of the skills in this lesson. Watch the talk, then complete the analysis questions.</p>
+  </div>
+ 
+  <div class="talks-grid">
+ 
+    <!-- TALK 1 -->
+    <div class="talk-card">
+      <div class="talk-top">
+        <div class="talk-badges">
+          <span class="talk-badge badge-time">⏱ 12 min</span>
+          <span class="talk-badge badge-skill">🎭 Hook + Personal Story</span>
+        </div>
+        <div class="talk-thumb" style="background: linear-gradient(135deg,#1a3a1a,#2d5a1a);">
+          <div class="thumb-play">▶</div>
+          <div class="thumb-label">The Happy Secret to Better Work</div>
+        </div>
+        <div class="talk-meta">
+          <h3 class="talk-title">The Happy Secret to Better Work</h3>
+          <p class="talk-speaker">Shawn Achor · 2011</p>
+          <p class="talk-desc">Achor opens with one of the funniest story hooks in TED history — then delivers a clear, evidence-based message about happiness and success. Watch how he blends humour, personal story, and data into a talk that feels effortless. A masterclass in the Narrative Hook.</p>
+        </div>
+        <a href="https://www.youtube.com/watch?v=GXy__kBVq1M" target="_blank" class="talk-btn">▶ Watch on YouTube</a>
+      </div>
+      <div class="talk-analysis">
+        <div class="analysis-title">📝 Talk Analysis</div>
+        <div class="field-group">
+          <label class="field-label">1. What personal story does Achor open with? Why is it an effective hook?</label>
+          <textarea id="w1q1" placeholder="He opens with the story of... This is effective because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">2. How does he use humour without losing his serious message?</label>
+          <textarea id="w1q2" placeholder="He uses humour by... but keeps the message serious by..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">3. What is his central "big idea"? Write it in one sentence.</label>
+          <textarea id="w1q3" placeholder="His big idea is that..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- TALK 2 -->
+    <div class="talk-card">
+      <div class="talk-top">
+        <div class="talk-badges">
+          <span class="talk-badge badge-time">⏱ 3 min</span>
+          <span class="talk-badge badge-skill">📐 Structure + Delivery</span>
+        </div>
+        <div class="talk-thumb" style="background: linear-gradient(135deg,#0f4c81,#1a6fa8);">
+          <div class="thumb-play">▶</div>
+          <div class="thumb-label">8 Secrets of Success</div>
+        </div>
+        <div class="talk-meta">
+          <h3 class="talk-title">8 Secrets of Success</h3>
+          <p class="talk-speaker">Richard St. John · 2005</p>
+          <p class="talk-desc">This 3-minute talk condenses 10 years of research into a perfectly structured, fast-paced, funny presentation. Notice how he uses simple visuals (one word at a time), energy, and humour to keep you hooked from start to finish.</p>
+        </div>
+        <a href="https://www.youtube.com/watch?v=Y6bbMQXQ180" target="_blank" class="talk-btn">▶ Watch on YouTube</a>
+      </div>
+      <div class="talk-analysis">
+        <div class="analysis-title">📝 Talk Analysis</div>
+        <div class="field-group">
+          <label class="field-label">1. List 3 of the 8 "secrets" he shares. Which surprised you most?</label>
+          <textarea id="w2q1" placeholder="Three secrets: 1... 2... 3... The most surprising was..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">2. How does St. John use visuals? What appears on the screen?</label>
+          <textarea id="w2q2" placeholder="The slides show... This technique works because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">3. This talk has no personal story. Do you think it needs one? Why?</label>
+          <textarea id="w2q3" placeholder="I think... because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- TALK 3 -->
+    <div class="talk-card">
+      <div class="talk-top">
+        <div class="talk-badges">
+          <span class="talk-badge badge-time">⏱ 6 min</span>
+          <span class="talk-badge badge-skill">📖 Personal Story + 3 Points</span>
+        </div>
+        <div class="talk-thumb" style="background: linear-gradient(135deg,#6b2737,#a83250);">
+          <div class="thumb-play">▶</div>
+          <div class="thumb-label">Grit: The Power of Passion and Perseverance</div>
+        </div>
+        <div class="talk-meta">
+          <h3 class="talk-title">Grit: The Power of Passion & Perseverance</h3>
+          <p class="talk-speaker">Angela Duckworth · 2013</p>
+          <p class="talk-desc">Duckworth opens with a bold personal story (she left a high-paying job to teach kids), then builds three evidence-based points, and closes with a clear call to action. This is the perfect example of the exact structure you will use.</p>
+        </div>
+        <a href="https://www.youtube.com/watch?v=H14bBuluwB8" target="_blank" class="talk-btn">▶ Watch on YouTube</a>
+      </div>
+      <div class="talk-analysis">
+        <div class="analysis-title">📝 Talk Analysis</div>
+        <div class="field-group">
+          <label class="field-label">1. What is Duckworth's personal story and how does she use it to introduce her topic?</label>
+          <textarea id="w3q1" placeholder="Her story is about... She connects it to her topic by..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">2. What evidence (data, research, examples) does she use to support her points?</label>
+          <textarea id="w3q2" placeholder="She uses evidence such as... This makes her argument stronger because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">3. What is her call to action at the end? Does it inspire you? Why?</label>
+          <textarea id="w3q3" placeholder="Her call to action is... It [does / does not] inspire me because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- TALK 4 -->
+    <div class="talk-card">
+      <div class="talk-top">
+        <div class="talk-badges">
+          <span class="talk-badge badge-time">⏱ 10 min</span>
+          <span class="talk-badge badge-skill">🎤 Voice + Delivery</span>
+        </div>
+        <div class="talk-thumb" style="background: linear-gradient(135deg,#1a3a1a,#2d6a2d);">
+          <div class="thumb-play">▶</div>
+          <div class="thumb-label">How to Speak So That People Want to Listen</div>
+        </div>
+        <div class="talk-meta">
+          <h3 class="talk-title">How to Speak So That People Want to Listen</h3>
+          <p class="talk-speaker">Julian Treasure · 2013</p>
+          <p class="talk-desc">This is the most useful talk for your delivery skills. Treasure identifies the 7 habits that make people stop listening, then teaches you 4 powerful vocal techniques (HAIL). He even does live vocal exercises — try them as you watch.</p>
+        </div>
+        <a href="https://www.youtube.com/watch?v=eIho2S0ZahI" target="_blank" class="talk-btn">▶ Watch on YouTube</a>
+      </div>
+      <div class="talk-analysis">
+        <div class="analysis-title">📝 Talk Analysis</div>
+        <div class="field-group">
+          <label class="field-label">1. Treasure lists 7 "deadly sins" of speaking. Write 3 that you are guilty of.</label>
+          <textarea id="w4q1" placeholder="I am guilty of: 1... 2... 3... I will stop doing this by..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">2. What does H.A.I.L stand for? How will you use it in your talk?</label>
+          <textarea id="w4q2" placeholder="H = ... A = ... I = ... L = ... I will use this by..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">3. Treasure uses his own voice as a visual aid — he changes pitch, pace and pause. Give one example from the talk.</label>
+          <textarea id="w4q3" placeholder="At [timestamp or moment], he... This created the effect of..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- TALK 5 -->
+    <div class="talk-card">
+      <div class="talk-top">
+        <div class="talk-badges">
+          <span class="talk-badge badge-time">⏱ 3 min</span>
+          <span class="talk-badge badge-skill">✨ Story + Call to Action</span>
+        </div>
+        <div class="talk-thumb" style="background: linear-gradient(135deg,#2d1b69,#5a3ea1);">
+          <div class="thumb-play">▶</div>
+          <div class="thumb-label">Try Something New for 30 Days</div>
+        </div>
+        <div class="talk-meta">
+          <h3 class="talk-title">Try Something New for 30 Days</h3>
+          <p class="talk-speaker">Matt Cutts · 2011</p>
+          <p class="talk-desc">In exactly 3 minutes and 27 seconds, Cutts tells a warm personal story, delivers a simple but memorable idea, and challenges the audience to act — all with no data, no jargon, and beautiful simplicity. A perfect model for your own 4-minute talk.</p>
+        </div>
+        <a href="https://www.youtube.com/watch?v=UNP03fDSj1U" target="_blank" class="talk-btn">▶ Watch on YouTube</a>
+      </div>
+      <div class="talk-analysis">
+        <div class="analysis-title">📝 Talk Analysis</div>
+        <div class="field-group">
+          <label class="field-label">1. Cutts has no statistics or research. How does he still make his idea convincing?</label>
+          <textarea id="w5q1" placeholder="Without data, he convinces us by... This works because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">2. How does he open and close his talk? Is there a connection between the opening and closing?</label>
+          <textarea id="w5q2" placeholder="He opens by... He closes by... The connection between them is..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">3. If YOU had 3 minutes, what "30-day challenge" would you propose to this audience?</label>
+          <textarea id="w5q3" placeholder="I would challenge this audience to... because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+ 
+  </div><!-- end talks-grid -->
+</div>
+ 
+<hr class="divider">
+ 
+<!-- ═══ STEP BY STEP LESSON ═══ -->
+<div id="steps" class="steps-wrapper">
+  <div class="steps-header">
+    <div class="section-label">Your Talk, Step by Step</div>
+    <h2 class="section-title" style="text-align:center">Build Your TED Talk</h2>
+    <p style="color:#888; max-width:560px; margin:0 auto; line-height:1.7">Click each step to learn the skill, see examples, and write your own ideas. Complete all five sections to finish your plan.</p>
+  </div>
+ 
+  <!-- ── STEP 0: Choose your topic ── -->
+  <div class="step-card step-1" id="card0">
+    <div class="step-header" onclick="toggleStep('card0')">
+      <div class="step-num">0</div>
+      <div class="step-title-area">
+        <div class="step-tag">Before You Begin</div>
+        <div class="step-title">Find Your "Heart Sings" Topic</div>
+      </div>
+      <div class="step-arrow">▼</div>
+    </div>
+    <div class="step-body">
+      <p class="step-intro">Before you write a single word, you need the right topic. The most powerful TED Talks come from speakers who are <em>obsessed</em> with their subject. Audiences can tell the difference between someone who cares and someone who doesn't.</p>
+ 
+      <div class="teach-box">
+        <strong>How to find your topic:</strong><br>
+        Ask yourself: What do I know about that most people don't? What problem do I wish the world would fix? What have I experienced that changed how I see things? What could I talk about for one hour without stopping?
+      </div>
+ 
+      <div class="tip-box">Your topic should be <strong>specific</strong>, not general. Not "I will talk about social media" — but "I will argue that social media is secretly changing the way we feel about our own lives." Specific = powerful.</div>
+ 
+      <!-- IKIGAI GRID -->
+      <div class="ikigai-label">
+        <span class="section-label" style="font-size:10px;">🌸 The Ikigai Method — Find Your Intersection</span>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px; line-height:1.6">Ikigai is a Japanese concept meaning "reason for being." Answer all four quadrants — your TED Talk topic lives at their intersection.</p>
+      </div>
+ 
+      <div class="ikigai-grid">
+        <div class="ik-card ik-love" onclick="this.querySelector('textarea').focus()">
+          <div class="ik-icon">❤️</div>
+          <label class="ik-label">What do you LOVE?</label>
+          <p class="ik-hint">Hobbies, causes, things you read about for fun, things that excite you.</p>
+          <textarea id="t0a" placeholder="e.g. technology, football, helping others, cooking, sustainability..." oninput="updateProgress();countChars(this,'c0a')" rows="3"></textarea>
+          <div class="char-counter" id="c0a">0 characters</div>
+        </div>
+        <div class="ik-card ik-good" onclick="this.querySelector('textarea').focus()">
+          <div class="ik-icon">⭐</div>
+          <label class="ik-label">What are you GOOD AT?</label>
+          <p class="ik-hint">Skills, natural talents, unique experiences, things others ask your help with.</p>
+          <textarea id="t0good" placeholder="e.g. explaining things, sports, languages, problem-solving, designing..." oninput="updateProgress()" rows="3"></textarea>
+        </div>
+        <div class="ik-card ik-world" onclick="this.querySelector('textarea').focus()">
+          <div class="ik-icon">🌍</div>
+          <label class="ik-label">What does the WORLD need?</label>
+          <p class="ik-hint">Problems you see in your community, the UAE, or globally that frustrate or move you.</p>
+          <textarea id="t0world" placeholder="e.g. mental health awareness, environmental change, equality, education..." oninput="updateProgress()" rows="3"></textarea>
+        </div>
+        <div class="ik-card ik-mission" onclick="this.querySelector('textarea').focus()">
+          <div class="ik-icon">🎯</div>
+          <label class="ik-label">Your MISSION — The Big Idea</label>
+          <p class="ik-hint">If you had 4 minutes, what ONE thing must the world hear? Complete: "My talk will show that..."</p>
+          <textarea id="t0b" placeholder="My talk will show that..." oninput="updateProgress();countChars(this,'c0b')" rows="3"></textarea>
+          <div class="char-counter" id="c0b">0 characters</div>
+        </div>
+      </div>
+ 
+      <div class="workspace" style="margin-top:20px;">
+        <div class="workspace-title">Why This? Why Me? Why Now?</div>
+        <div class="field-group">
+          <label class="field-label">Why does this topic make your heart sing? Why are YOU the right person to speak about it?</label>
+          <textarea id="t0c" placeholder="This topic matters to me because... I am the right person to speak about this because..." oninput="updateProgress();countChars(this,'c0c')" rows="4"></textarea>
+          <div class="char-counter" id="c0c">0 characters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── STEP 1: Hook ── -->
+  <div class="step-card step-1" id="card1">
+    <div class="step-header" onclick="toggleStep('card1')">
+      <div class="step-num">1</div>
+      <div class="step-title-area">
+        <div class="step-tag">Opening — First 30 Seconds</div>
+        <div class="step-title">The Hook: Grab Them Instantly</div>
+      </div>
+      <div class="step-arrow">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="timer-note"><span>⏱</span> The first 30 seconds decide everything. If you lose the audience here, you may never get them back.</div>
+ 
+      <p class="step-intro">A hook is your opening move — a surprising statement, a question, a shocking fact, or the beginning of a story that makes the audience lean forward and think: <em>"I need to know where this is going."</em></p>
+ 
+      <div class="teach-box">
+        <strong>4 Types of Powerful Hooks:</strong><br><br>
+        🎯 <strong>The Bold Statement</strong> — Start with something surprising or controversial.<br>
+        ❓ <strong>The Rhetorical Question</strong> — Ask something your audience has never thought about.<br>
+        📊 <strong>The Shocking Statistic</strong> — A number so surprising it demands attention.<br>
+        🎭 <strong>The Story Opening</strong> — Drop us into a moment <em>in medias res</em> (in the middle of the action).
+      </div>
+ 
+      <div class="example-box">
+        <div class="example-label">Example Hook — Bold Statement</div>
+        <div class="example-text">"I want to tell you about the day I nearly failed my university entrance exam — and why that failure was the best thing that ever happened to me."</div>
+      </div>
+ 
+      <div class="example-box">
+        <div class="example-label">Example Hook — Shocking Statistic</div>
+        <div class="example-text">"Every 40 seconds, someone in the world dies by suicide. That's over 2,000 people a day — and most of them never asked for help. I want to talk about why."</div>
+      </div>
+ 
+      <div class="tip-box">Do NOT start with "Good morning, my name is..." That is not a hook. Start with the idea — introduce yourself later, or let your ideas speak for themselves.</div>
+ 
+      <div class="workspace">
+        <div class="workspace-title">My Hook</div>
+        <div class="field-group">
+          <label class="field-label">Click a hook type to get a starter template — then make it yours:</label>
+          <div class="hook-cards">
+            <div class="hook-card hc-bold" onclick="selectHook('bold')">
+              <div class="hook-card-icon">🎯</div>
+              <div class="hook-card-name">Bold Statement</div>
+              <div class="hook-card-ex">"I am going to tell you something that will change how you see..."</div>
+            </div>
+            <div class="hook-card hc-question" onclick="selectHook('question')">
+              <div class="hook-card-icon">❓</div>
+              <div class="hook-card-name">Rhetorical Question</div>
+              <div class="hook-card-ex">"Have you ever wondered why... even though we know that..."</div>
+            </div>
+            <div class="hook-card hc-stat" onclick="selectHook('stat')">
+              <div class="hook-card-icon">📊</div>
+              <div class="hook-card-name">Shocking Statistic</div>
+              <div class="hook-card-ex">"Every [time], [number] of [people] [thing]. That number is not going down."</div>
+            </div>
+            <div class="hook-card hc-story" onclick="selectHook('story')">
+              <div class="hook-card-icon">🎭</div>
+              <div class="hook-card-name">Story Opening</div>
+              <div class="hook-card-ex">"I was [age] years old when [event happened]. I didn't know it then, but..."</div>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">My hook (write it word for word):</label>
+          <div class="field-hint" id="hookHintText">Choose a card above — a starter template will appear here. Then rewrite it in your own words.</div>
+          <textarea id="t1a" placeholder="Your hook will appear here when you click a card above..." oninput="updateProgress();countChars(this,'c1a')" rows="5"></textarea>
+          <div class="char-counter" id="c1a">0 characters</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">How will this hook connect to my main topic?</label>
+          <textarea id="t1b" placeholder="My hook connects to my topic because..." oninput="updateProgress();countChars(this,'c1b')" rows="3"></textarea>
+          <div class="char-counter" id="c1b">0 characters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── STEP 2: Personal Story ── -->
+  <div class="step-card step-2" id="card2">
+    <div class="step-header" onclick="toggleStep('card2')">
+      <div class="step-num">2</div>
+      <div class="step-title-area">
+        <div class="step-tag">The Heart of Your Talk</div>
+        <div class="step-title">Your Personal Story: Make It Real</div>
+      </div>
+      <div class="step-arrow">▼</div>
+    </div>
+    <div class="step-body">
+      <p class="step-intro">Great TED Talks are built on <em>vulnerability and truth</em>. Your personal story is what separates you from a textbook — it's the moment the audience stops listening and starts <em>feeling</em>. This is your most powerful tool.</p>
+ 
+      <div class="teach-box">
+        <strong>The Story Arc — 5 Elements:</strong><br><br>
+        1️⃣ <strong>Setup</strong> — Who, where, when? Paint the scene.<br>
+        2️⃣ <strong>The Problem / Turning Point</strong> — What went wrong, changed, or challenged you?<br>
+        3️⃣ <strong>The Struggle</strong> — What did you do? What did you feel?<br>
+        4️⃣ <strong>The Breakthrough</strong> — What changed? What did you learn or decide?<br>
+        5️⃣ <strong>The Lesson</strong> — What does this mean for your audience? Why should they care?
+      </div>
+ 
+      <div class="example-box">
+        <div class="example-label">Mini Story Example</div>
+        <div class="example-text">"When I was 16, I sat in the car with my father in complete silence for three hours. He had just been told he would lose his job — a job he had held for 22 years. I didn't know what to say. Looking back now, I realise that silence taught me more about communication than any lecture ever could."</div>
+      </div>
+ 
+      <div class="teach-box">
+        <strong>Storytelling Tips:</strong><br>
+        • Use <strong>specific details</strong> — not "I was sad" but "I sat in the dark, holding my phone, re-reading the message three times."<br>
+        • Use <strong>dialogue</strong> — quote what people said. It brings scenes to life.<br>
+        • Use <strong>present tense</strong> for action moments — "I walk in. The room is silent."<br>
+        • Keep it to <strong>60–90 seconds</strong> — powerful and focused.
+      </div>
+ 
+      <div class="workspace">
+        <div class="workspace-title">My Personal Story</div>
+        <div class="field-group">
+          <label class="field-label">Setup: Who, where, when?</label>
+          <textarea id="t2a" placeholder="It was... I was... The year was..." oninput="updateProgress();countChars(this,'c2a')" rows="3"></textarea>
+          <div class="char-counter" id="c2a">0 characters</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">The turning point: What happened?</label>
+          <textarea id="t2b" placeholder="Then something changed / went wrong / surprised me..." oninput="updateProgress();countChars(this,'c2b')" rows="3"></textarea>
+          <div class="char-counter" id="c2b">0 characters</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">The lesson: What did this teach you or change in you?</label>
+          <textarea id="t2c" placeholder="That moment taught me that... / I realised..." oninput="updateProgress();countChars(this,'c2c')" rows="3"></textarea>
+          <div class="char-counter" id="c2c">0 characters</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Bridge to topic: How does your story connect to your big idea?</label>
+          <textarea id="t2d" placeholder="This story connects to today's topic because..." oninput="updateProgress();countChars(this,'c2d')" rows="2"></textarea>
+          <div class="char-counter" id="c2d">0 characters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── STEP 3: Three Points ── -->
+  <div class="step-card step-3" id="card3">
+    <div class="step-header" onclick="toggleStep('card3')">
+      <div class="step-num">3</div>
+      <div class="step-title-area">
+        <div class="step-tag">The Body — The Evidence</div>
+        <div class="step-title">Three Points That Convince</div>
+      </div>
+      <div class="step-arrow">▼</div>
+    </div>
+    <div class="step-body">
+      <p class="step-intro">After your story draws the audience in emotionally, your three points give your talk intellectual weight. Each point should support your big idea with a different type of evidence.</p>
+ 
+      <div class="teach-box">
+        <strong>The Rule of Three:</strong><br>
+        The human brain loves groups of three. It feels complete and balanced. Structure each point the same way:<br><br>
+        📌 <strong>State it</strong> — What is the point? (1 sentence)<br>
+        🔍 <strong>Prove it</strong> — Evidence: fact, statistic, expert opinion, or research<br>
+        🌍 <strong>Connect it</strong> — Why does this matter to your audience?
+      </div>
+ 
+      <div class="tip-box">Each point should take about 45–60 seconds. Use a clear signpost phrase to move between them: "My first reason is...", "But that's not all — secondly...", "Finally, and perhaps most importantly..."</div>
+ 
+      <div class="example-box">
+        <div class="example-label">Example — Point 1 (State → Prove → Connect)</div>
+        <div class="example-text">"First, sleep deprivation is an epidemic among young people. Research from the University of Michigan shows that 73% of students report feeling chronically tired. If you're sitting in this room right now feeling exhausted — you are not alone, and that is not normal."</div>
+      </div>
+ 
+      <div class="workspace">
+        <div class="workspace-title">My Three Points</div>
+        <div class="points-grid">
+          <div class="point-card">
+            <h4>Point 01 — First</h4>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">State it:</label>
+              <textarea id="t3a1" placeholder="My first point is..." oninput="updateProgress();countChars(this,'c3a1')" rows="2" style="font-size:0.88rem;"></textarea>
+              <div class="char-counter" id="c3a1">0</div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">Evidence / Proof:</label>
+              <textarea id="t3a2" placeholder="According to... / Research shows... / For example..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">Why it matters:</label>
+              <textarea id="t3a3" placeholder="This matters because..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+          </div>
+          <div class="point-card">
+            <h4>Point 02 — Second</h4>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">State it:</label>
+              <textarea id="t3b1" placeholder="Secondly..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">Evidence / Proof:</label>
+              <textarea id="t3b2" placeholder="According to... / Studies show..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">Why it matters:</label>
+              <textarea id="t3b3" placeholder="This matters because..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+          </div>
+          <div class="point-card">
+            <h4>Point 03 — Finally</h4>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">State it:</label>
+              <textarea id="t3c1" placeholder="Finally, and most importantly..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">Evidence / Proof:</label>
+              <textarea id="t3c2" placeholder="According to... / The data shows..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" style="font-size:0.78rem">Why it matters:</label>
+              <textarea id="t3c3" placeholder="This matters because..." oninput="updateProgress()" rows="2" style="font-size:0.88rem;"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="field-group" style="margin-top:20px">
+          <label class="field-label">My closing call to action / final message:</label>
+          <div class="field-hint">What do you want your audience to DO, THINK, or FEEL after your talk?</div>
+          <textarea id="t3end" placeholder="I want my audience to leave thinking / doing / feeling..." oninput="updateProgress();countChars(this,'c3end')" rows="3"></textarea>
+          <div class="char-counter" id="c3end">0 characters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── STEP 4: Visual Aids ── -->
+  <div class="step-card step-4" id="card4">
+    <div class="step-header" onclick="toggleStep('card4')">
+      <div class="step-num">4</div>
+      <div class="step-title-area">
+        <div class="step-tag">Your Slides — Less is More</div>
+        <div class="step-title">Visual Aids: Impress Without Words</div>
+      </div>
+      <div class="step-arrow">▼</div>
+    </div>
+    <div class="step-body">
+      <div id="visuals"></div>
+      <p class="step-intro">A TED Talk slide is not a page of notes — it is a <em>visual punch</em>. The best TED slides have almost no text at all. Your voice carries the message. The slide supports it visually.</p>
+ 
+      <div class="teach-box">
+        <strong>The Golden Rule of TED Slides:</strong><br><br>
+        If your audience is reading your slide, they are <strong>not listening to you</strong>. Your job is to make slides that <em>enhance</em> what you say — not repeat it.
+      </div>
+ 
+      <div class="slide-compare">
+        <div class="slide-col bad-slide">
+          <div class="slide-col-label bad-label">❌ Avoid This — "Classroom Style"</div>
+          <div class="slide-preview bad-preview">
+            <div class="bad-slide-content">
+              <div class="bad-title">My Main Argument</div>
+              <ul class="bad-bullets">
+                <li>• Point one is very important to note</li>
+                <li>• Point two has lots of data and research</li>
+                <li>• Please read this while I talk to you</li>
+                <li>• I am hiding behind my slides right now</li>
+                <li>• Bullet points show I ran out of ideas</li>
+              </ul>
+            </div>
+          </div>
+          <p class="slide-caption">Audiences read instead of listen. The speaker disappears.</p>
+        </div>
+        <div class="slide-col good-slide">
+          <div class="slide-col-label good-label">✅ Aim for This — "TED Style"</div>
+          <div class="slide-preview good-preview">
+            <div class="good-word">HOPE.</div>
+          </div>
+          <p class="slide-caption">One word. One image. One feeling. You do the talking.</p>
+        </div>
+      </div>
+ 
+      <div class="big-quote" style="font-size:1.3rem; padding:28px 16px;">"One powerful image is worth more than ten bullet points."</div>
+ 
+      <div class="viz-grid">
+        <div class="viz-card">
+          <div class="icon">🖼️</div>
+          <h4>Full-Bleed Images</h4>
+          <p>Use one striking photograph that fills the entire slide. No borders. No text overlaid on the image.</p>
+        </div>
+        <div class="viz-card">
+          <div class="icon">🔢</div>
+          <h4>Big Numbers</h4>
+          <p>One statistic. Giant font. White on dark, or dark on white. "73%" on a slide is more powerful than a paragraph.</p>
+        </div>
+        <div class="viz-card">
+          <div class="icon">💬</div>
+          <h4>One-Word Slides</h4>
+          <p>Sometimes one word — "SILENCE." or "HOPE." — makes the audience feel exactly what you want.</p>
+        </div>
+        <div class="viz-card">
+          <div class="icon">📊</div>
+          <h4>Simple Charts</h4>
+          <p>One graph, clearly labelled. Show the trend only. Remove every element that does not carry information.</p>
+        </div>
+        <div class="viz-card">
+          <div class="icon">🎨</div>
+          <h4>Colour & Contrast</h4>
+          <p>Choose one or two brand colours. High contrast. Dark background + light text often reads better on stage.</p>
+        </div>
+        <div class="viz-card">
+          <div class="icon">🔤</div>
+          <h4>Minimal Text</h4>
+          <p>Maximum 6 words per slide. If you need more, split into two slides or — better — just say it out loud.</p>
+        </div>
+      </div>
+ 
+      <div class="do-dont">
+        <div class="do-col">
+          <h4>✦ Slide DO's</h4>
+          <ul>
+            <li>One idea per slide</li>
+            <li>High-quality, royalty-free images</li>
+            <li>Large, readable fonts (min 28pt)</li>
+            <li>Consistent colour theme</li>
+            <li>Plenty of empty space</li>
+            <li>5–8 slides for a 4-minute talk</li>
+          </ul>
+        </div>
+        <div class="dont-col">
+          <h4>✦ Slide DON'Ts</h4>
+          <ul>
+            <li>Walls of bullet points</li>
+            <li>Clip art or low-res images</li>
+            <li>Reading off the slide</li>
+            <li>Animations that distract</li>
+            <li>Too many colours or fonts</li>
+            <li>Your script written on a slide</li>
+          </ul>
+        </div>
+      </div>
+ 
+      <div class="slide-rule">
+        <h4>📐 Slide Planning Rule for a 4-Minute Talk</h4>
+        <p>You should have approximately <strong>5–8 slides</strong>. Think: 1 title slide, 1 for your hook/story, 1 per main point (3 slides), 1 for your closing message. That's 6–7 slides. Every slide should have a reason to exist.</p>
+      </div>
+ 
+      <div class="teach-box">
+        <strong>Where to find free, high-quality images:</strong><br>
+        🌐 <strong>Unsplash.com</strong> — Beautiful, royalty-free photography<br>
+        🌐 <strong>Pexels.com</strong> — Free photos and videos<br>
+        🌐 <strong>Canva.com</strong> — Free slide templates + image library<br>
+        🌐 <strong>Flaticon.com</strong> — Free icons and illustrations<br><br>
+        Always choose images that <em>feel</em> right for the emotion of your point — not just the literal topic.
+      </div>
+ 
+      <div class="workspace">
+        <div class="workspace-title">My Slide Plan</div>
+        <div class="field-group">
+          <label class="field-label">My slide colour theme and design style:</label>
+          <div class="field-hint">Example: "Dark background, white text, one red accent colour — clean and minimal."</div>
+          <input type="text" id="t4a" placeholder="My slide design will be..." oninput="updateProgress()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Plan my slides (one line per slide — what image / word / data will appear?)</label>
+          <div class="field-hint">Example: Slide 1: Title — my name + talk title | Slide 2: A photo of... | Slide 3: The statistic "73%"</div>
+          <textarea id="t4b" placeholder="Slide 1: &#10;Slide 2: &#10;Slide 3: &#10;Slide 4: &#10;Slide 5: &#10;Slide 6: " oninput="updateProgress();countChars(this,'c4b')" rows="8"></textarea>
+          <div class="char-counter" id="c4b">0 characters</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Which slide am I most excited about? Why?</label>
+          <textarea id="t4c" placeholder="I'm most excited about slide... because..." oninput="updateProgress()" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── STEP 5: Delivery ── -->
+  <div class="step-card step-5" id="card5">
+    <div class="step-header" onclick="toggleStep('card5')">
+      <div class="step-num">5</div>
+      <div class="step-title-area">
+        <div class="step-tag">On Stage — Own the Room</div>
+        <div class="step-title">Delivery: Body, Voice & Confidence</div>
+      </div>
+      <div class="step-arrow">▼</div>
+    </div>
+    <div class="step-body">
+      <p class="step-intro">Your words are only part of the message. Research suggests that <strong>55% of communication is body language</strong>, 38% is voice tone, and only 7% is the words themselves. Delivery is everything on a stage.</p>
+ 
+      <div class="teach-box">
+        <strong>The Speaker's Toolkit:</strong><br><br>
+        👁 <strong>Eye Contact</strong> — Look at different people. Hold eye contact for 3–4 seconds before moving on. Never stare at the screen or floor.<br><br>
+        🗣 <strong>Voice Variation</strong> — Speed up for excitement. Slow down for emphasis. Use <em>pauses</em> — they are powerful, not awkward.<br><br>
+        🙌 <strong>Gestures</strong> — Open hands, deliberate movement. No fidgeting. Let your hands breathe.<br><br>
+        🚶 <strong>Movement</strong> — Move with intention. Step forward for importance. Step back to give the audience space.<br><br>
+        😤 <strong>Nerves</strong> — Nervousness means you care. Before you speak, take three slow breaths. The audience wants you to succeed.
+      </div>
+ 
+      <div class="tip-box">Practise standing up, not sitting down. Say your talk aloud at least 5 times before your assessment. Record yourself — it's uncomfortable, but it is the fastest way to improve.</div>
+ 
+      <div class="workspace">
+        <div class="workspace-title">My Delivery Plan</div>
+        <div class="field-group">
+          <label class="field-label">My biggest delivery challenge (be honest):</label>
+          <input type="text" id="t5a" placeholder="e.g. I tend to speak too fast / I look at the floor / I forget my words..." oninput="updateProgress()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">One specific thing I will practise to improve delivery:</label>
+          <input type="text" id="t5b" placeholder="e.g. I will record myself and watch it back / I will practise eye contact with..." oninput="updateProgress()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">My talk rehearsal schedule (when and how will I practise?):</label>
+          <textarea id="t5c" placeholder="I will practise on: &#10;Day 1: &#10;Day 2: &#10;Day 3: " oninput="updateProgress()" rows="4"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══ CHECKLIST ═══ -->
+<hr class="divider">
+<div id="checklist" class="section">
+  <div class="section-label">Assessment Readiness</div>
+  <h2 class="section-title">Pre-Talk Checklist</h2>
+  <p class="section-body" style="margin-bottom:32px">Tick each box when it is ready. Aim for 100% before your presentation day.</p>
+ 
+  <ul class="checklist" id="checklistEl">
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span>I have chosen a topic from the approved list (or got teacher approval for my own)</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Element 1 — Hook:</strong> My opening hook is written out and does NOT start with "Good morning / my name is"</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Element 2 — Three Points:</strong> I have three clear main points, each with evidence, details, and a "so what?"</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Element 3 — Story:</strong> I have at least one well-developed personal story (setup → turning point → lesson)</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Element 4 — Example:</strong> I have at least one well-developed real-world example or piece of evidence</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Element 5 — Clear Ending:</strong> My talk has a strong, memorable closing statement or call to action</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Slides:</strong> My PowerPoint uses the official HCT template and has been submitted to Blackboard</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Slides:</strong> Each slide has minimal text, large images, and maximum 6 words — NO bullet point walls</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Language:</strong> I am using my own words — no memorised scripts, no reading from notes or screen</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Delivery:</strong> I have practised eye contact, voice variation (pace, pause, pitch), and confident body language</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Part 1 (10%):</strong> My one content slide is fully developed and ready for Week 13</span></li>
+    <li onclick="toggleCheck(this)"><div class="check-box"></div><span><strong>Timing:</strong> My full talk is between 3–6 minutes (timed standing up, out loud)</span></li>
+  </ul>
+ 
+  <div id="checkProgress" style="margin-top:24px; padding:16px 20px; background:#fff; border:1.5px solid rgba(0,0,0,0.07); border-radius:12px; font-family:'DM Mono',monospace; font-size:0.9rem; color:var(--text-muted); display:flex; align-items:center; gap:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <span id="checkCount">0 / 12</span> <span style="color:var(--text-light);">items complete</span>
+    <div style="flex:1; height:8px; background:rgba(230,43,30,0.08); border-radius:4px; overflow:hidden;">
+      <div id="checkBar" style="height:100%; background:linear-gradient(90deg,var(--red),var(--step5)); width:0%; transition:width 0.4s ease;"></div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══ ROADMAP GENERATOR ═══ -->
+<hr class="divider">
+<div class="section" style="padding-bottom:20px;">
+  <div class="section-label">Your Talk at a Glance</div>
+  <h2 class="section-title">Generate My TED Roadmap</h2>
+  <p class="section-body" style="margin-bottom:32px;">When you've filled in all sections above, click the button below to compile your entire plan into a single printable one-pager — your personal TED Talk blueprint.</p>
+  <div style="text-align:center;">
+    <button class="btn-primary" onclick="generateRoadmap()" style="font-size:1.1rem; padding:18px 48px;">
+      🗺 Generate My TED Roadmap
+    </button>
+  </div>
+</div>
+ 
+<!-- ROADMAP OUTPUT (hidden until generated) -->
+<div id="roadmapOutput" style="display:none; max-width:900px; margin:0 auto; padding:0 24px 60px;">
+  <div class="roadmap-card">
+    <div class="roadmap-header">
+      <div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:3px; color:rgba(255,255,255,0.6); text-transform:uppercase; margin-bottom:8px;">My TED Talk Blueprint</div>
+        <h2 style="font-family:'Playfair Display',serif; font-size:1.9rem; color:#fff; margin:0;">Your TED Roadmap</h2>
+      </div>
+      <button onclick="window.print()" class="roadmap-print-btn">🖨 Print</button>
+    </div>
+ 
+    <div class="roadmap-body">
+      <div class="rm-section">
+        <div class="rm-label">🎯 My Big Idea (Mission)</div>
+        <p id="rm-mission" class="rm-text"></p>
+      </div>
+ 
+      <div class="rm-divider"></div>
+ 
+      <div class="rm-section">
+        <div class="rm-label">🪝 The Opening Hook</div>
+        <p id="rm-hook" class="rm-text rm-italic"></p>
+      </div>
+ 
+      <div class="rm-divider"></div>
+ 
+      <div class="rm-section">
+        <div class="rm-label">📖 My Personal Story</div>
+        <div class="rm-story-grid">
+          <div class="rm-story-cell">
+            <div class="rm-story-tag">Setup</div>
+            <p id="rm-s-setup" class="rm-text-sm"></p>
+          </div>
+          <div class="rm-story-cell">
+            <div class="rm-story-tag">Turning Point</div>
+            <p id="rm-s-turn" class="rm-text-sm"></p>
+          </div>
+          <div class="rm-story-cell">
+            <div class="rm-story-tag">Lesson</div>
+            <p id="rm-s-lesson" class="rm-text-sm"></p>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="rm-divider"></div>
+ 
+      <div class="rm-section">
+        <div class="rm-label">📐 Rule of Three — My Points</div>
+        <div class="rm-points">
+          <div class="rm-point">
+            <span class="rm-point-num" style="background:var(--step1);">1</span>
+            <p id="rm-p1" class="rm-text-sm"></p>
+          </div>
+          <div class="rm-point">
+            <span class="rm-point-num" style="background:var(--step3);">2</span>
+            <p id="rm-p2" class="rm-text-sm"></p>
+          </div>
+          <div class="rm-point">
+            <span class="rm-point-num" style="background:var(--step5);">3</span>
+            <p id="rm-p3" class="rm-text-sm"></p>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="rm-divider"></div>
+ 
+      <div class="rm-grid-2">
+        <div class="rm-section">
+          <div class="rm-label">🖼 Visual / Slide Plan</div>
+          <p id="rm-slides" class="rm-text-sm"></p>
+        </div>
+        <div class="rm-section">
+          <div class="rm-label">✊ Call to Action</div>
+          <p id="rm-cta" class="rm-text-sm"></p>
+        </div>
+      </div>
+ 
+      <div class="rm-divider"></div>
+ 
+      <div class="rm-footer-note">
+        🎤 Now practise standing up — say your talk out loud at least 5 times before your assessment day.
+      </div>
+    </div>
+  </div>
+</div>
+ 
+ 
+<div class="save-panel">
+  <div class="save-card">
+    <h2>Your Talk is Taking Shape 🎤</h2>
+    <p>Save your plan so you can come back to it — or print it to share with your instructor.</p>
+    <div class="save-actions">
+      <button class="btn-primary" onclick="savePlan()">💾 Save My Plan (JSON)</button>
+      <button class="btn-outline" onclick="loadPlan()">📂 Load Saved Plan</button>
+      <button class="btn-outline" onclick="window.print()">🖨 Print My Plan</button>
+    </div>
+    <input type="file" id="fileInput" accept=".json" style="display:none" onchange="readFile(event)">
+    <div id="saveMsg" style="margin-top:16px; font-size:0.85rem; color:rgba(255,255,255,0.9);"></div>
+  </div>
+</div>
+ 
+<footer>
+  Designed by <strong>Nazila Motahari</strong> · Higher Colleges of Technology · GED 100 / LSC 1503 · TED Talk Assessment Unit<br>
+  <span style="font-size:0.75rem; margin-top:6px; display:block">Inspired by TED.com · "Ideas Worth Spreading"</span>
+</footer>
+ 
+<script>
+  // ─── ACCORDION ───
+  function toggleStep(id) {
+    const card = document.getElementById(id);
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.step-card').forEach(c => c.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
+    updateProgress();
+  }
+ 
+  // ─── CHAR COUNTER ───
+  function countChars(el, counterId) {
+    const counter = document.getElementById(counterId);
+    if (counter) counter.textContent = el.value.length + ' characters';
+  }
+ 
+  // ─── CHECKLIST ───
+  function toggleCheck(li) {
+    li.classList.toggle('checked');
+    updateCheckProgress();
+  }
+ 
+  function updateCheckProgress() {
+    const total = document.querySelectorAll('.checklist li').length;
+    const done = document.querySelectorAll('.checklist li.checked').length;
+    document.getElementById('checkCount').textContent = done + ' / ' + total;
+    document.getElementById('checkBar').style.width = (done / total * 100) + '%';
+  }
+ 
+  // ─── SCROLL PROGRESS BAR ───
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('pbar').style.width = (scrolled / total * 100) + '%';
+  });
+ 
+  // ─── HOOK CARD SELECT + TEMPLATE AUTO-FILL ───
+  const hookTemplates = {
+    bold:     "I am going to tell you something that most people refuse to believe: [your bold claim]. And I have seen it with my own eyes.",
+    question: "Have you ever stopped to ask yourself: [your question]? We all know the answer. And yet, nothing changes. Today, I want to talk about why.",
+    stat:     "Every [time period], [shocking number] of [people] [thing]. That's [comparison to make it real]. And that number is not going down.",
+    story:    "I was [age] years old when [event happened]. The room was [detail]. I didn't know it then — but that moment changed everything."
+  };
+  const hookHints = {
+    bold:     "✅ Bold Statement selected — replace the brackets with your own words. Be daring.",
+    question: "✅ Rhetorical Question selected — ask something your audience has never considered.",
+    stat:     "✅ Shocking Statistic selected — find a real number that surprises people.",
+    story:    "✅ Story Opening selected — drop us right into the moment. Use vivid details."
+  };
+ 
+  function selectHook(type) {
+    document.querySelectorAll('.hook-card').forEach(c => c.classList.remove('selected'));
+    const clicked = document.querySelector(`.hc-${type}`);
+    if (clicked) clicked.classList.add('selected');
+    const ta = document.getElementById('t1a');
+    if (!ta.value.trim() || confirm('Replace your current hook draft with the template?')) {
+      ta.value = hookTemplates[type];
+      countChars(ta, 'c1a');
+    }
+    document.getElementById('hookHintText').textContent = hookHints[type];
+    ta.focus();
+    updateProgress();
+  }
+ 
+  // ─── GENERATE ROADMAP ───
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? (el.value.trim() || '—') : '—';
+  }
+ 
+  function generateRoadmap() {
+    document.getElementById('rm-mission').textContent  = val('t0b');
+    document.getElementById('rm-hook').textContent     = val('t1a');
+    document.getElementById('rm-s-setup').textContent  = val('t2a');
+    document.getElementById('rm-s-turn').textContent   = val('t2b');
+    document.getElementById('rm-s-lesson').textContent = val('t2c');
+    document.getElementById('rm-p1').textContent       = val('t3a1') + (val('t3a2') !== '—' ? ' — ' + val('t3a2') : '');
+    document.getElementById('rm-p2').textContent       = val('t3b1') + (val('t3b2') !== '—' ? ' — ' + val('t3b2') : '');
+    document.getElementById('rm-p3').textContent       = val('t3c1') + (val('t3c2') !== '—' ? ' — ' + val('t3c2') : '');
+    document.getElementById('rm-slides').textContent   = val('t4b');
+    document.getElementById('rm-cta').textContent      = val('t3end');
+ 
+    const out = document.getElementById('roadmapOutput');
+    out.style.display = 'block';
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  // ─── FILL PROGRESS ───
+  function updateProgress() {
+    const fields = document.querySelectorAll('textarea, input[type=text], select');
+    let filled = 0;
+    fields.forEach(f => { if (f.value.trim().length > 0) filled++; });
+    // no visible counter — just drives pbar feel
+  }
+ 
+  // ─── SAVE / LOAD ───
+  function getIds() {
+    return ['t0a','t0good','t0world','t0b','t0c',
+            't1a','t1b','t2a','t2b','t2c','t2d',
+            't3a1','t3a2','t3a3','t3b1','t3b2','t3b3','t3c1','t3c2','t3c3',
+            't3end','t4a','t4b','t4c','t5a','t5b','t5c',
+            'w1q1','w1q2','w1q3','w2q1','w2q2','w2q3',
+            'w3q1','w3q2','w3q3','w4q1','w4q2','w4q3',
+            'w5q1','w5q2','w5q3'];
+  }
+ 
+  function savePlan() {
+    const data = {};
+    getIds().forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'my-ted-talk-plan.json';
+    a.click();
+    document.getElementById('saveMsg').textContent = '✓ Plan saved! Keep this file safe.';
+    setTimeout(() => document.getElementById('saveMsg').textContent = '', 4000);
+  }
+ 
+  function loadPlan() { document.getElementById('fileInput').click(); }
+ 
+  function readFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        getIds().forEach(id => {
+          const el = document.getElementById(id);
+          if (el && data[id] !== undefined) el.value = data[id];
+        });
+        // Recount chars
+        document.querySelectorAll('textarea').forEach(ta => {
+          const cid = ta.id.replace('t','c');
+          countChars(ta, cid);
+        });
+        document.getElementById('saveMsg').textContent = '✓ Plan loaded successfully!';
+        setTimeout(() => document.getElementById('saveMsg').textContent = '', 4000);
+        updateProgress();
+      } catch(err) {
+        document.getElementById('saveMsg').textContent = '⚠ Could not read file. Please use a valid JSON plan.';
+      }
+    };
+    reader.readAsText(file);
+  }
+ 
+  // Open first card by default
+  document.getElementById('card0').classList.add('open');
+</script>
+</body>
+</html>
+ 
